@@ -98,11 +98,11 @@ def get_info_for_items():
             item = find_wayfair_item_info(item)
     return items
 
-def tweet_speed_to_comcast():
+def tweet_speed_to_comcast(platform : str):
     download, upload = get_speed()
     percent_acceptable = .2
     average_percentage = .94
-    expected_minimum_download = (1000*average_percentage)*percent_acceptable
+    expected_minimum_download = 50 if platform == 'pi' else 200 if platform == 'laptop' else (1000*average_percentage)*percent_acceptable
     body = r"""Hey @Comcast why is my internet speed {down} Mbps DOWN / {up} Mbps UP when I pay for 1000 Mbps down\40 Mbps up in Burlington MA? @ComcastCares @xfinity #comcast #speedtest""".format(down=download, up=upload)
     if download <= expected_minimum_download:
         send_tweet(body=body)
