@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import configparser
+from datetime import datetime
 import os
 import requests
 import smtplib
@@ -99,11 +100,15 @@ def get_info_for_items():
     return items
 
 def tweet_speed_to_comcast(platform : str):
+    filepath = '{cwd}/{filepath}'.format(cwd=os.getcwd(), filepath='helpers/speed_test/results.txt')
+    filepath = convert_path_slashes(filepath)
     download, upload = get_speed()
     percent_acceptable = .2
     average_percentage = .94
     expected_minimum_download = 50 if platform == 'pi' else 200 if platform == 'laptop' else (1000*average_percentage)*percent_acceptable
     body = r"""Hey @Comcast why is my internet speed {down} Mbps DOWN / {up} Mbps UP when I pay for 1000 Mbps down\40 Mbps up in Burlington MA? @ComcastCares @xfinity #comcast #speedtest""".format(down=download, up=upload)
+    message = '{date} -> DOWN - {down} Mbps / UP - {up} Mbps'.format(date=datetime.now().strftime("%m/%d/%y %HH:%M:%S"), down=download, up=upload)
+    append_to_file(filename=filepath, message=message)
     if download <= expected_minimum_download:
         send_tweet(body=body)
 
