@@ -11,7 +11,7 @@ import tweepy
 
 
 def append_to_file(filename : str, message : str):
-    with open(filename, 'a+') as file:
+    with open(filename, 'a') as file:
         file.write(message)
 
 def get_speed():
@@ -100,7 +100,7 @@ def get_info_for_items():
     return items
 
 def tweet_speed_to_comcast(platform : str):
-    filepath = '{cwd}/{filepath}'.format(cwd=os.getcwd(), filepath='helpers/speed_test/results.txt')
+    filepath = '{filepath}'.format(filepath='/home/pi/Desktop/python-utilities/helpers/speed_test/results.txt')
     filepath = convert_path_slashes(filepath)
     download, upload = get_speed()
     percent_acceptable = .2
