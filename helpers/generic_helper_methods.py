@@ -79,7 +79,7 @@ def send_email(item):
 
 def products_to_price_check():
     data = []
-    filepath = '{filepath}'.format(filepath='/home/pi/Desktop/python-utilities/price_checker/products.txt')
+    filepath = '{filepath}'.format(filepath='/home/pi/Desktop/python-utilities/helpers/price_checker/products.txt')
     filepath = convert_path_slashes(filepath)
     with open(filepath, 'r') as file:
         for line in file:
