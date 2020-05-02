@@ -7,10 +7,10 @@ if __name__ == '__main__':
     parser.add_argument('-st', '--speed_test', action='store_true', help='Trigger the speed test')
     args = parser.parse_args()
     
-    if args.price_checker is not None:
+    if args.price_checker:
         price_checker()
     
-    if args.speed_test is not None:
+    if args.speed_test:
         tweet_speed_to_comcast(platform='pi')
         
     
