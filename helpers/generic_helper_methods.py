@@ -11,7 +11,7 @@ import tweepy
 
 
 def append_to_file(filename : str, message : str):
-    with open(filename, 'a') as file:
+    with open(filename, 'a+') as file:
         file.write(message)
 
 def get_speed():
