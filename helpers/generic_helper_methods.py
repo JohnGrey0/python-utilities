@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import configparser
 from datetime import datetime
 import os
+import pathlib
 import requests
 import smtplib
 import speedtest
@@ -9,6 +10,8 @@ import sys
 import time
 import tweepy
 
+def get_abs_path():
+    return str(pathlib.Path(__file__).parent.absolute())
 
 def append_to_file(filename : str, message : str):
     with open(filename, 'a+') as file:
@@ -38,11 +41,11 @@ def send_tweet(body):
     auth.set_access_token(access_token, access_token_secret) 
     api = tweepy.API(auth)
     # update the status 
-    api.update_status(status=body) 
+    api.update_status(status=body)
     
 def get_config():
     config = configparser.ConfigParser()
-    config_path = '{filepath}'.format(filepath='helpers/config.ini')
+    config_path = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/config.ini')
     config.read(convert_path_slashes(config_path))
     return config
 
@@ -79,7 +82,7 @@ def send_email(item):
 
 def products_to_price_check():
     data = []
-    filepath = '{filepath}'.format(filepath='helpers/price_checker/products.txt')
+    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/price_checker/products.txt')
     filepath = convert_path_slashes(filepath)
     with open(filepath, 'r') as file:
         for line in file:
@@ -100,7 +103,7 @@ def get_info_for_items():
     return items
 
 def tweet_speed_to_comcast(platform : str):
-    filepath = '{filepath}'.format(filepath='helpers/speed_test/results.txt')
+    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/speed_test/results.txt')
     filepath = convert_path_slashes(filepath)
     download, upload = get_speed()
     percent_acceptable = .2
