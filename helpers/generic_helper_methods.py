@@ -45,7 +45,7 @@ def send_tweet(body):
     
 def get_config():
     config = configparser.ConfigParser()
-    config_path = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/config.ini')
+    config_path = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='config.ini')
     config.read(convert_path_slashes(config_path))
     return config
 
@@ -82,7 +82,7 @@ def send_email(item):
 
 def products_to_price_check():
     data = []
-    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/price_checker/products.txt')
+    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='price_checker/products.txt')
     filepath = convert_path_slashes(filepath)
     with open(filepath, 'r') as file:
         for line in file:
@@ -103,7 +103,7 @@ def get_info_for_items():
     return items
 
 def tweet_speed_to_comcast(platform : str):
-    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='helpers/speed_test/results.txt')
+    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(), filepath='speed_test/results.txt')
     filepath = convert_path_slashes(filepath)
     download, upload = get_speed()
     percent_acceptable = .2
