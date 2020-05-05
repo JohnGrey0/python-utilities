@@ -1,5 +1,5 @@
 import argparse
-from helpers.generic_helper_methods import price_checker, tweet_speed_to_comcast
+from helpers.generic_helper_methods import price_checker, test_speed
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -11,6 +11,6 @@ if __name__ == '__main__':
         price_checker()
     
     if args.speed_test:
-        tweet_speed_to_comcast(platform='pi')
+        test_speed()
         
     

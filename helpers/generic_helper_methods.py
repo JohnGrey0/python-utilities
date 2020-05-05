@@ -12,7 +12,7 @@ import time
 import tweepy
 
 
-def get_mongo_conn(database : str, collection: str):
+def get_mongo_conn(database: str, collection: str):
     client = pymongo.MongoClient()
     db = client[database]
     return db[collection]
@@ -129,27 +129,28 @@ def get_info_for_items():
     return items
 
 
-def tweet_speed_to_comcast(platform: str):
-    filepath = '{abs}/{filepath}'.format(abs=get_abs_path(),
-                                         filepath='speed_test/results.txt')
-    filepath = convert_path_slashes(filepath)
+def test_speed():
+    variables = {'min_down': 50,
+                 'pay_down': 1000,
+                 'pay_up': 40,
+                 'min_acceptable_down': 50,
+                 'internet_prov': 'Comcast',
+                 'loc': 'Burlington, MA'}
+
     download, upload = get_speed()
-    curr_date = datetime.utcnow()
+    variables['down'], variables['up'] = get_speed()
     collection = get_mongo_conn('mydbs', 'speed')
-    insert = {"date": curr_date,
+    
+    insert = {"date": datetime.utcnow(),
               "download": download,
               "upload": upload}
+
     collection.insert_one(insert).inserted_id
-    percent_acceptable = .2
-    average_percentage = .94
-    expected_minimum_download = 50 if platform == 'pi' else 200 if platform == 'laptop' else (
-        1000*average_percentage)*percent_acceptable
-    body = r"""Hey @Comcast why is my internet speed {down} Mbps DOWN / {up} Mbps UP when I pay for 1000 Mbps down\40 Mbps up in Burlington MA? @ComcastCares @xfinity #comcast #speedtest""".format(
-        down=download, up=upload)
-    message = '{date},{down},{up}\n'.format(date=datetime.now().strftime(
-        "%m/%d/%y %HH:%M:%S"), down=download, up=upload)
-    append_to_file(filename=filepath, message=message)
-    if download <= expected_minimum_download:
+
+    body = r"""Hey @{internet_prov} why is my internet speed {down} Mbps DOWN / {up} Mbps UP when I pay for {pay_down} Mbps down / {pay_up} Mbps up in {loc}? @ComcastCares @xfinity #comcast #speedtest""".format(
+        **variables)
+
+    if variables['down'] <= variables['min_acceptable_down']:
         send_tweet(body=body)
 
 
